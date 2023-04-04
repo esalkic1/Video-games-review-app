@@ -8,7 +8,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
 class GameListAdapter (
-    private var games: List<Game>
+    private var games: List<Game>, private val onItemClicked: (game:Game) -> Unit
 ) : RecyclerView.Adapter<GameListAdapter.GameViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GameViewHolder {
         val view = LayoutInflater
@@ -30,6 +30,7 @@ class GameListAdapter (
         if (id==0) id=context.resources
             .getIdentifier("picture1", "drawable", context.packageName)
         holder.movieImage.setImageResource(id)*/
+        holder.itemView.setOnClickListener{ onItemClicked(games[position]) }
     }
     fun updateGames(games: List<Game>) {
         this.games = games
