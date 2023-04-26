@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".GameDetailsActivity">
+    tools:context=".GameDetailsFragment">
 
     <LinearLayout
         android:id="@+id/linearLayout1"
@@ -17,31 +17,13 @@
 
         <ImageView
             android:id="@+id/logo_image"
-            android:layout_width="20dp"
-            android:layout_height="match_parent"
-            android:layout_marginTop="5dp"
-            android:layout_weight="1"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:paddingTop="5dp"
+            android:layout_marginStart="10dp"
+            android:layout_gravity="center_horizontal"
             android:src="@drawable/logo_icon" />
 
-        <Button
-            android:id="@+id/home_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="0dp"
-            android:layout_marginEnd="10dp"
-            android:layout_weight="1"
-            android:text="Home" />
-
-        <Button
-            android:id="@+id/details_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="0dp"
-            android:layout_marginEnd="10dp"
-            android:layout_weight="1"
-            android:enabled="false"
-            android:text="Details" />
     </LinearLayout>
 
     <LinearLayout
@@ -56,7 +38,7 @@
 
 
         <TextView
-            android:id="@+id/game_title_textview"
+            android:id="@+id/item_title_textview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="TextView"

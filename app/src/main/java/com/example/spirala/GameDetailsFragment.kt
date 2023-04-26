@@ -3,20 +3,27 @@ package com.example.spirala
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import androidx.fragment.app.Fragment
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
+import androidx.core.os.bundleOf
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-
+import com.google.android.material.bottomnavigation.BottomNavigationItemView
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
 private lateinit var reviews: RecyclerView
 private lateinit var reviewsAdapter: ReviewListAdapter
 private lateinit var reviewsList: List<Any>
-private lateinit var homeButton: Button
 
-class GameDetailsActivity : AppCompatActivity() {
+class GameDetailsFragment : Fragment() {
+
     private lateinit var game: Game
     private lateinit var cover: ImageView
     private lateinit var title: TextView
@@ -28,32 +35,32 @@ class GameDetailsActivity : AppCompatActivity() {
     private lateinit var genre: TextView
     private lateinit var description: TextView
 
+    private lateinit var bottomNavigationView: BottomNavigationView
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_game_details)
-        cover = findViewById(R.id.cover_imageview)
-        title = findViewById(R.id.game_title_textview)
-        platform = findViewById(R.id.platform_textview)
-        releaseDate = findViewById(R.id.release_date_textview)
-        esrbRating = findViewById(R.id.esrb_rating_textview)
-        developer = findViewById(R.id.developer_textview)
-        publisher = findViewById(R.id.publisher_textview)
-        genre = findViewById(R.id.genre_textview)
-        description = findViewById(R.id.description_textview)
-        val extras = intent.extras
-        if (extras != null) {
-            game = GameData.getDetails(extras.getString("game_title",""))!!
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        var view =  inflater.inflate(R.layout.fragment_game_details, container, false)
+        cover = view.findViewById(R.id.cover_imageview)
+        title = view.findViewById(R.id.item_title_textview)
+        platform = view.findViewById(R.id.platform_textview)
+        releaseDate = view.findViewById(R.id.release_date_textview)
+        esrbRating = view.findViewById(R.id.esrb_rating_textview)
+        developer = view.findViewById(R.id.developer_textview)
+        publisher = view.findViewById(R.id.publisher_textview)
+        genre = view.findViewById(R.id.genre_textview)
+        description = view.findViewById(R.id.description_textview)
+
+
+        val bundle = arguments
+        if (bundle != null){
+            game = GameData.getDetails(bundle.getString("game_title", ""))!!
             populateDetails()
-        } else {
-            finish()
         }
 
         //recyclerView
         reviewsList = GameData.getSortedImpressions(game.title)
-        reviews = findViewById(R.id.review_list)
+        reviews = view.findViewById(R.id.review_list)
         reviews.layoutManager = LinearLayoutManager(
-            this,
+            activity,
             LinearLayoutManager.VERTICAL,
             false
         )
@@ -61,23 +68,31 @@ class GameDetailsActivity : AppCompatActivity() {
         reviews.adapter = reviewsAdapter
         reviewsAdapter.updateGames(reviewsList)
 
-        homeButton = findViewById(R.id.home_button)
-        homeButton.setOnClickListener(){
-            openNewActivity()
+        bottomNavigationView = requireActivity().findViewById(R.id.bottom_nav)
+        val homeItem: BottomNavigationItemView = bottomNavigationView.findViewById(R.id.homeItem)
+        homeItem.setOnClickListener {
+            requireView().findNavController().navigate(R.id.action_gameDetailsItem_to_homeItem2, bundle)
         }
 
+
+
+        return view
     }
 
-    override fun onBackPressed() {
+
+
+
+
+    /*override fun onBackPressed() {
         openNewActivity()
-    }
+    }*/
 
-    private fun openNewActivity() {
+    /*private fun openNewActivity() {
         val intent = Intent(this, HomeActivity::class.java).apply {
             putExtra("game_title", game.title)
         }
         startActivity(intent)
-    }
+    }*/
 
     private fun populateDetails() {
         title.text = game.title
@@ -97,4 +112,3 @@ class GameDetailsActivity : AppCompatActivity() {
         cover.setImageResource(id)
     }
 }
-
