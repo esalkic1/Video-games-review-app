@@ -2,6 +2,7 @@ package com.example.spirala
 
 import android.content.Context
 import android.content.Intent
+import android.content.res.Configuration
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -13,6 +14,7 @@ import android.widget.TextView
 import androidx.core.os.bundleOf
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomnavigation.BottomNavigationItemView
@@ -38,7 +40,7 @@ class GameDetailsFragment : Fragment() {
     private lateinit var bottomNavigationView: BottomNavigationView
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        var view =  inflater.inflate(R.layout.fragment_game_details, container, false)
+        var view = inflater.inflate(R.layout.fragment_game_details, container, false)
         cover = view.findViewById(R.id.cover_imageview)
         title = view.findViewById(R.id.item_title_textview)
         platform = view.findViewById(R.id.platform_textview)
@@ -51,8 +53,12 @@ class GameDetailsFragment : Fragment() {
 
 
         val bundle = arguments
-        if (bundle != null){
+        if (bundle != null) {
             game = GameData.getDetails(bundle.getString("game_title", ""))!!
+            populateDetails()
+        }
+        else{
+            game = GameData.getDetails("FIFA 23")!!
             populateDetails()
         }
 
@@ -68,16 +74,22 @@ class GameDetailsFragment : Fragment() {
         reviews.adapter = reviewsAdapter
         reviewsAdapter.updateGames(reviewsList)
 
-        bottomNavigationView = requireActivity().findViewById(R.id.bottom_nav)
-        val homeItem: BottomNavigationItemView = bottomNavigationView.findViewById(R.id.homeItem)
-        homeItem.setOnClickListener {
-            requireView().findNavController().navigate(R.id.action_gameDetailsItem_to_homeItem2, bundle)
+        val orientation = this.resources.configuration.orientation
+        if (orientation == Configuration.ORIENTATION_PORTRAIT) {
+            bottomNavigationView = requireActivity().findViewById(R.id.bottom_nav)
+            val homeItem: BottomNavigationItemView =
+                bottomNavigationView.findViewById(R.id.homeItem)
+            homeItem.setOnClickListener {
+                requireView().findNavController()
+                    .navigate(R.id.action_gameDetailsItem_to_homeItem2, bundle)
+            }
         }
 
 
 
-        return view
-    }
+            return view
+        }
+
 
 
 

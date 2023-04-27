@@ -48,9 +48,9 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:+'
     androidTestImplementation 'androidx.test:core-ktx:+'
     androidTestImplementation 'androidx.test.ext:junit-ktx:+'
-    testImplementation("org.hamcrest:hamcrest:x.y.z")
     androidTestImplementation 'androidx.test.espresso:espresso-core:+'
     androidTestImplementation 'androidx.test.espresso:espresso-intents:+'
     testImplementation("org.hamcrest:hamcrest:2.2")
+    androidTestImplementation 'androidx.test.uiautomator:uiautomator:2.2.0'
 
 }

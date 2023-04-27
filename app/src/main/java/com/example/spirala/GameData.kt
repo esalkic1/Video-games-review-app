@@ -4,7 +4,7 @@ class GameData {
     companion object Factory{
         fun getAll(): List<Game>{
             return listOf(Game("FIFA 23", "PlayStation 5", "27.09.2022.", 4.1, "fifa23",
-            "Everyone", "EA Sports", "Electronic Arts", "sports", "Live out your football dreams as a manager or a player in Career Mode FIFA 23 brings you the ability to define your personality as a player, manage as some of football’s most famous names, and enjoy a" +
+            "Everyone", "EA Sports", "Electronic Arts", "Sports", "Live out your football dreams as a manager or a player in Career Mode FIFA 23 brings you the ability to define your personality as a player, manage as some of football’s most famous names, and enjoy a" +
                         " new way to play your season with Playable Highlights in the most authentic FIFA Career Mode experience to date.",
                 listOf(UserRating("EmirS21", 250, 4.7), UserReview("EmirS21", 400, "Great game"), UserRating("Darwizzy", 50, 5.0),
                 UserReview("Clarismario", 500, "Amazing graphics, Career mode is improved"), UserRating("Clarismario", 1000, 5.0))

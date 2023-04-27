@@ -1,6 +1,7 @@
 package com.example.spirala
 
 import android.content.Intent
+import android.content.res.Configuration
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -8,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.FragmentTransaction
+import androidx.fragment.app.findFragment
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
@@ -42,21 +44,34 @@ class HomeFragment : Fragment() {
         val bundle = arguments
         if (bundle != null) {
             game = GameData.getDetails(bundle.getString("game_title", ""))!!
-            bottomNavigationView = requireActivity().findViewById(R.id.bottom_nav)
-            val detailsItem: BottomNavigationItemView =
-                bottomNavigationView.findViewById(R.id.gameDetailsItem)
-            bottomNavigationView.menu.getItem(1).isEnabled = true
-            detailsItem.setOnClickListener {
-                requireView().findNavController()
-                    .navigate(R.id.action_homeFragment_to_gameDetailsFragment, bundle)
+            val orientation = this.resources.configuration.orientation
+            if (orientation == Configuration.ORIENTATION_PORTRAIT) {
+                bottomNavigationView = requireActivity().findViewById(R.id.bottom_nav)
+                val detailsItem: BottomNavigationItemView =
+                    bottomNavigationView.findViewById(R.id.gameDetailsItem)
+                bottomNavigationView.menu.getItem(1).isEnabled = true
+                detailsItem.setOnClickListener {
+                    requireView().findNavController()
+                        .navigate(R.id.action_homeFragment_to_gameDetailsFragment, bundle)
+                }
             }
         }
 
         return view;
     }
     private fun showGameDetails(game: Game) {
-        val bundle = bundleOf("game_title" to game.title)
-        requireView().findNavController().navigate(R.id.action_homeFragment_to_gameDetailsFragment, bundle)
+        val orientation = this.resources.configuration.orientation
+        if (orientation == Configuration.ORIENTATION_PORTRAIT) {
+            val bundle = bundleOf("game_title" to game.title)
+            requireView().findNavController()
+                .navigate(R.id.action_homeFragment_to_gameDetailsFragment, bundle)
+        }
+        else{
+            val bundle = bundleOf("game_title" to game.title)
+            val gameDetailsFragment = GameDetailsFragment()
+            gameDetailsFragment.arguments = bundle
+            requireActivity().supportFragmentManager.beginTransaction().replace(R.id.nav_host_fragment_landscape, gameDetailsFragment).commit()
+        }
     }
 
 }
