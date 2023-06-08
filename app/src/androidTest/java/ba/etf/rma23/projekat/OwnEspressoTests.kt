@@ -1,21 +1,18 @@
-package com.example.spirala
+package ba.etf.rma23.projekat
 
-import android.content.pm.ActivityInfo
 import androidx.recyclerview.widget.RecyclerView
 import androidx.test.core.app.launchActivity
 import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.PositionAssertions.*
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition
 import androidx.test.espresso.matcher.ViewMatchers.*
-import androidx.test.ext.junit.rules.activityScenarioRule
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.UiDevice
+import com.example.spirala.R
 import org.hamcrest.Matchers.allOf
-import org.junit.Before
 import org.junit.Test
 
 class OwnEspressoTests {
@@ -33,7 +30,7 @@ class OwnEspressoTests {
     @Test
     fun testDetailsButtonNavigation() {
         // Pokretanje aktivnosti
-        val scenario = launchActivity<HomeActivity>()
+        val scenario = launchActivity<MainActivity>()
 
         // Provjera da li je recycler view vidljiv
         onView(withId(R.id.game_list))
@@ -82,7 +79,7 @@ class OwnEspressoTests {
     @Test
     fun GameDetailsFragmentTest(){
         // Pokretanje aktivnosti
-        val scenario = launchActivity<HomeActivity>()
+        val scenario = launchActivity<MainActivity>()
 
         // Provjera da li je recycler view vidljiv
         onView(withId(R.id.game_list))
@@ -143,10 +140,10 @@ class OwnEspressoTests {
         uiDevice.setOrientationLeft()
 
         // Pokretanje home aktivnosti
-        val activityScenario = launchActivity<HomeActivity>()
+        val activityScenario = launchActivity<MainActivity>()
 
         // Provjera da li je vidljiv home fragment
-        onView(withId(com.example.spirala.R.id.home_fragment)).check(matches(isDisplayed()))
+        onView(withId(R.id.home_fragment)).check(matches(isDisplayed()))
 
         // Provjera da li je u game details fragmentu vidljiv naslov igre
         onView(allOf( withId(R.id.item_title_textview), isDescendantOfA(withId(R.id.linearLayout4))))
@@ -161,7 +158,9 @@ class OwnEspressoTests {
             .check(matches(withText("NBA 2K23")))
 
         // Provjera da li je home fragment lijevo od details fragmenta
-        onView(withId(R.id.game_list)).check(isCompletelyLeftOf(allOf(withId(R.id.item_title_textview), isDescendantOfA(withId(R.id.linearLayout4)))))
+        onView(withId(R.id.game_list)).check(isCompletelyLeftOf(allOf(withId(R.id.item_title_textview), isDescendantOfA(withId(
+            R.id.linearLayout4
+        )))))
 
         // Povratak na portrait mode
         uiDevice.setOrientationNatural()

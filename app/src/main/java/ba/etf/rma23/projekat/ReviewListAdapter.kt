@@ -1,4 +1,4 @@
-package com.example.spirala
+package ba.etf.rma23.projekat
 
 import android.view.LayoutInflater
 import android.view.View
@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import android.widget.RatingBar
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.RecyclerView.ViewHolder
+import com.example.spirala.R
 
 class ReviewListAdapter (
     private var items: List<Any>

@@ -8,13 +8,16 @@ android {
     compileSdk 33
 
     defaultConfig {
-        applicationId "com.example.spirala"
+        applicationId "ba.etf.rma23.projekat"
         minSdk 29
         targetSdk 33
         versionCode 1
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        buildConfigField("String", "CLIENT_ID", CLIENT_ID)
+        buildConfigField("String", "AUTHORIZATION", AUTHORIZATION)
+        buildConfigField("String" ,"ACC_HASH", ACC_HASH)
     }
 
     buildTypes {
@@ -53,4 +56,15 @@ dependencies {
     testImplementation("org.hamcrest:hamcrest:2.2")
     androidTestImplementation 'androidx.test.uiautomator:uiautomator:2.2.0'
 
+    implementation 'com.squareup.retrofit2:retrofit:+'
+    implementation 'com.squareup.retrofit2:converter-gson:+'
+
+    implementation(platform("com.squareup.okhttp3:okhttp-bom:4.10.0"))
+    implementation("com.squareup.okhttp3:okhttp")
+    implementation("com.squareup.okhttp3:logging-interceptor")
+
+    implementation 'com.squareup.picasso:picasso:2.8'
+
+    implementation 'com.github.bumptech.glide:glide:+'
+    annotationProcessor 'com.github.bumptech.glide:compiler:+'
 }

@@ -5,7 +5,7 @@
     android:id="@+id/constraint_layout1"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".HomeActivity">
+    tools:context="ba.etf.rma23.projekat.MainActivity">
 
     <LinearLayout
         android:id="@+id/linearLayout1"
@@ -21,10 +21,19 @@
             android:id="@+id/logo_image"
             android:layout_width="50dp"
             android:layout_height="50dp"
+            android:layout_weight="1"
             android:paddingTop="5dp"
             android:layout_marginStart="10dp"
             android:layout_gravity="center_horizontal"
             android:src="@drawable/logo_icon" />
+
+        <Button
+            android:id="@+id/sort_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:layout_marginEnd="10sp"
+            android:text="Sort" />
 
     </LinearLayout>
 

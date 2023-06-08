@@ -6,11 +6,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="horizontal"
-    tools:context=".HomeActivity">
+    tools:context="ba.etf.rma23.projekat.MainActivity">
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/home_fragment"
-        android:name="com.example.spirala.HomeFragment"
+        android:name="ba.etf.rma23.projekat.HomeFragment"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_weight="1"
