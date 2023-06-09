@@ -8,7 +8,7 @@ import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.*
 
-private const val accHash: String = BuildConfig.ACC_HASH
+private const val accHash: String = "cc34599c-0a71-4dae-8a36-4601b74c0375"
 
 interface AccountApi {
 

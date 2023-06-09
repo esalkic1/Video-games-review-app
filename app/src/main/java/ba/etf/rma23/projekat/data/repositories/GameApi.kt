@@ -8,8 +8,8 @@ import retrofit2.http.Body
 import retrofit2.http.Headers
 import retrofit2.http.POST
 
-private const val clientID : String = BuildConfig.CLIENT_ID
-private const val authorization: String = BuildConfig.AUTHORIZATION
+private const val clientID : String = "uirklhpg5uo6dowvlnvi8rgzfc0nqx"
+private const val authorization: String = "Bearer uqy3naoamzfyzjjhgwjupf38oimhyq"
 
 interface GameApi {
     @Headers(

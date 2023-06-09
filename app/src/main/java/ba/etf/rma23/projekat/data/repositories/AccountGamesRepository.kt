@@ -8,7 +8,7 @@ import okhttp3.RequestBody.Companion.toRequestBody
 
 
 object AccountGamesRepository {
-    var accHash: String = BuildConfig.ACC_HASH
+    var accHash: String = "cc34599c-0a71-4dae-8a36-4601b74c0375"
     var userAge: Int = 0
     //var favoriteGames: List<Game> = emptyList()
 
