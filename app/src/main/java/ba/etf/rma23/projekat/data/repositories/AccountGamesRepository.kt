@@ -47,7 +47,10 @@ object AccountGamesRepository {
             var response = AccountApiConfig.retrofit.getSavedGames(accHash)
             val responseBody: ArrayList<Game> = response.body() as ArrayList<Game>
             for (i in responseBody?.indices!!){   // valjda treba da vrati cijeli game kao sa IGDB
-                responseBody[i] = GamesRepository.getGamesByID(responseBody.get(i).id).get(0)
+                val games = GamesRepository.getGamesByID(responseBody.get(i).id)
+                if(games.size != 0) {
+                    responseBody[i] = games.get(0)
+                }
             }
             GamesRepository.shownGames = responseBody
             return@withContext responseBody!!

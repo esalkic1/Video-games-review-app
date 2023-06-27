@@ -6,6 +6,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.withContext
 import okhttp3.RequestBody.Companion.toRequestBody
+import java.net.UnknownHostException
 
 sealed class Result<out R> {
     data class Success<out T>(val data: T) : Result<T>()
@@ -39,12 +40,21 @@ object GamesRepository {
     }
 
     suspend fun getGamesByID(id:Int):List<Game>{
-        return withContext(Dispatchers.IO){
-            var text: String = "fields id, name, platforms.name, release_dates.human, age_ratings.rating, " +
-                    "cover.url, involved_companies.company.name, genres.name, summary; where id = "+ id + ";"
-            var response = IGDBApiConfig.retrofit.getGamesByID(text.toRequestBody())
-            val responseBody = response.body()
-            return@withContext responseBody!!
+        try {
+            return withContext(Dispatchers.IO) {
+                var text: String =
+                    "fields id, name, platforms.name, release_dates.human, age_ratings.rating, " +
+                            "cover.url, involved_companies.company.name, genres.name, summary; where id = " + id + ";"
+                var response = IGDBApiConfig.retrofit.getGamesByID(text.toRequestBody())
+                val responseBody = response.body()
+                if (responseBody == null) return@withContext ArrayList<Game>()
+                return@withContext responseBody!!
+            }
+        }catch (e: java.lang.NullPointerException){
+            throw e
+        }
+        catch (e: UnknownHostException){
+            throw e
         }
     }
 

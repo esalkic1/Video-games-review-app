@@ -1,6 +1,7 @@
 package ba.etf.rma23.projekat.data.repositories
 
 import ba.etf.rma23.projekat.Game
+import ba.etf.rma23.projekat.GameReview
 import com.example.spirala.BuildConfig
 import okhttp3.RequestBody
 import okhttp3.ResponseBody
@@ -45,4 +46,22 @@ interface AccountApi {
     suspend fun getGamesContainingString(
         @Path("aid") accHash: String,
     ): Response<List<Game>>
+
+    @Headers(
+        "Content-Type: application/json"
+    )
+    @POST("/account/{aid}/game/{gid}/gamereview")
+    suspend fun sendGameReview(
+        @Path("aid") accHash: String,
+        @Path("gid") gameID: Int,
+        @Body() text: RequestBody
+    ): Response<GameReview>
+
+    @Headers(
+        "Content-Type: application/json"
+    )
+    @GET("/game/{gid}/gamereviews")
+    suspend fun getReviewsForGame(
+        @Path("gid") gameID: Int
+    ): Response<List<GameReview>>
 }

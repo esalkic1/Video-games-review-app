@@ -104,24 +104,33 @@ class HomeFragment : Fragment() {
         }
     }
 
-    fun getGame(id: Int): Game{
+    fun getGame(id: Int): Game {
         runBlocking {
-            val foundGame = CoroutineScope(Dispatchers.IO).async {
-                GamesRepository.getGamesByID(id)
+            try {
+                val foundGame = CoroutineScope(Dispatchers.IO).async {
+                    GamesRepository.getGamesByID(id)
+                }
+                val found = foundGame.await()
+                if (found.isNotEmpty()) game = found[0]
+            } catch (e: Exception) {
+                e.printStackTrace()
             }
-            val found = foundGame.await()
-            if (found.isNotEmpty()) game = found.get(0)
         }
         return game
     }
 
-    private fun sortGames(){
+    private fun sortGames() {
         val scope = CoroutineScope(Job() + Dispatchers.Main)
         scope.launch {
-            val result = GamesRepository.sortGames()
-            when (result) {
-                is List<Game> -> onSortSuccess(result)
-                else -> onSortError()
+            try {
+                val result = GamesRepository.sortGames()
+                when (result) {
+                    is List<Game> -> onSortSuccess(result)
+                    else -> onSortError()
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+                onSortError()
             }
         }
     }
@@ -143,21 +152,26 @@ class HomeFragment : Fragment() {
         toast.show()
         search(searchText.text.toString())
     }
-    fun search(query: String){
+    fun search(query: String) {
         val scope = CoroutineScope(Job() + Dispatchers.Main)
-        // Kreira se Coroutine na UI
-        scope.launch{
-            // Vrti se poziv servisa i suspendira se rutina dok se `withContext` ne zavrsi
-            var result: List<Game>
-            if(AccountGamesRepository.userAge > 17 || AccountGamesRepository.userAge == 0) {
-                result = GamesRepository.getGamesByName(query)
-            }
-            else result = GamesRepository.getGamesSafe(query)
-
-            // Prikaze se rezultat korisniku na glavnoj niti
-            when (result) {
-                is List<Game> -> searchDone(result)
-                else -> onSearchError()
+        // Create a new coroutine on the UI thread
+        scope.launch {
+            try {
+                // Vrti se poziv servisa i suspendira se rutina dok se `withContext` ne zavrsi
+                var result: List<Game>
+                if (AccountGamesRepository.userAge > 17 || AccountGamesRepository.userAge == 0) {
+                    result = GamesRepository.getGamesByName(query)
+                } else {
+                    result = GamesRepository.getGamesSafe(query)
+                }
+                // Prikaze se rezultat korisniku na glavnoj niti
+                when (result) {
+                    is List<Game> -> searchDone(result)
+                    else -> onSearchError()
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+                onSearchError()
             }
         }
     }
@@ -168,20 +182,27 @@ class HomeFragment : Fragment() {
         favoriteGamesAdapter.updateGames(games)
     }
     fun onSearchError() {
-        val toast = Toast.makeText(context, "Search error", Toast.LENGTH_SHORT)
-        toast.show()
+        if (context != null) {
+            val toast = Toast.makeText(context, "Search error", Toast.LENGTH_SHORT)
+            toast.show()
+        }
     }
 
-    fun getFavoriteGames( ){
+    fun getFavoriteGames() {
         val scope = CoroutineScope(Job() + Dispatchers.Main)
         // Create a new coroutine on the UI thread
-        scope.launch{
-            // Opcija 1
-            val result = AccountGamesRepository.getSavedGames()
-            // Display result of the network request to the user
-            when (result) {
-                is List<Game> -> onSuccess(result)
-                else -> onError()
+        scope.launch {
+            try {
+                // Opcija 1
+                val result = AccountGamesRepository.getSavedGames()
+                // Display result of the network request to the user
+                when (result) {
+                    is List<Game> -> onSuccess(result)
+                    else -> onError()
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+                onError()
             }
         }
     }
@@ -192,8 +213,10 @@ class HomeFragment : Fragment() {
         favoriteGamesAdapter.updateGames(games)
     }
     fun onError() {
-        val toast = Toast.makeText(context, "Search error", Toast.LENGTH_SHORT)
-        toast.show()
+        if(context != null) {
+            val toast = Toast.makeText(context, "Search error", Toast.LENGTH_SHORT)
+            toast.show()
+        }
     }
 }
 

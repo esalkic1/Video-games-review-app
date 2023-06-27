@@ -7,7 +7,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.EditText
 import android.widget.ImageView
+import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -15,6 +17,7 @@ import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import ba.etf.rma23.projekat.data.repositories.AccountGamesRepository
+import ba.etf.rma23.projekat.data.repositories.GameReviewsRepository
 import ba.etf.rma23.projekat.data.repositories.GamesRepository
 import com.bumptech.glide.Glide
 import com.example.spirala.R
@@ -25,7 +28,7 @@ import kotlinx.coroutines.*
 
 private lateinit var reviews: RecyclerView
 private lateinit var reviewsAdapter: ReviewListAdapter
-private lateinit var reviewsList: List<Any>
+private lateinit var reviewsList: ArrayList<Any>
 
 
 class GameDetailsFragment : Fragment() {
@@ -45,6 +48,10 @@ class GameDetailsFragment : Fragment() {
 
     private lateinit var saveGameButton: Button
     private lateinit var removeGameButton: Button
+    private lateinit var addReviewButton: Button
+
+    private lateinit var reviewText: EditText
+    private lateinit var ratingSpinner: Spinner
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         var view = inflater.inflate(R.layout.fragment_game_details, container, false)
@@ -73,16 +80,21 @@ class GameDetailsFragment : Fragment() {
         }
 
         //recyclerView
-        reviewsList = GameData.getSortedImpressions(game.title)
+        //reviewsList = GameData.getSortedImpressions(game.title)
+        reviewsList = ArrayList()
         reviews = view.findViewById(R.id.review_list)
         reviews.layoutManager = LinearLayoutManager(
             activity,
             LinearLayoutManager.VERTICAL,
             false
         )
-        reviewsAdapter = ReviewListAdapter(arrayListOf())
+        reviewsAdapter = ReviewListAdapter(reviewsList)
         reviews.adapter = reviewsAdapter
-        reviewsAdapter.updateGames(reviewsList)
+
+// Call getReviewsById to fetch and populate the reviews list
+        GlobalScope.launch {
+            getReviewsById(game.id)
+        }
 
         val orientation = this.resources.configuration.orientation
         if (orientation == Configuration.ORIENTATION_PORTRAIT) {
@@ -109,6 +121,17 @@ class GameDetailsFragment : Fragment() {
             toast.show()
             removeGame()
         }
+
+        addReviewButton = view.findViewById(R.id.button_add_review)
+        reviewText = view.findViewById(R.id.editText_review)
+        ratingSpinner = view.findViewById(R.id.spinner_rating)
+
+        addReviewButton.setOnClickListener{
+            val review: String = reviewText.text.toString()
+            val rating: String = ratingSpinner.selectedItem.toString()
+            sendReviewApi(requireContext(), review, rating)
+        }
+
 
             return view
         }
@@ -185,6 +208,36 @@ class GameDetailsFragment : Fragment() {
 
 
 
+    fun sendReviewApi(context: Context, review: String, rating: String){
+        val scope = CoroutineScope(Job() + Dispatchers.Main)
+        scope.launch {
+            val result = GameReviewsRepository.sendReview(context, GameReview(rating.toInt(), review, game.id, false, "", ""))
+            if (result){
+                val toast = Toast.makeText(context, "Review sent", Toast.LENGTH_SHORT)
+                toast.show()
+            }
+            else{
+                val toast = Toast.makeText(context, "Review saved to database", Toast.LENGTH_SHORT)
+                toast.show()
+            }
+        }
+    }
+
+
+    private suspend fun getReviewsById(id: Int) {
+        val list = withContext(Dispatchers.IO) {
+            GameReviewsRepository.getReviewsForGame(id)
+        }
+        for (i in list.indices) {
+            val ts = list[i].timestamp?.toLong()
+            val rating = list[i].rating?.toDouble()
+            if (list[i].rating != null) reviewsList.add(UserRating(list[i].student!!, ts!!, rating!!))
+            if (list[i].review != null) reviewsList.add(UserReview(list[i].student!!, ts!!, list[i].review!!))
+        }
+        withContext(Dispatchers.Main) {
+            reviewsAdapter.updateGames(reviewsList)
+        }
+    }
 
 
 
