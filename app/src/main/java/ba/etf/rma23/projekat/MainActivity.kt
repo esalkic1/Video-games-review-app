@@ -41,10 +41,10 @@ class MainActivity : AppCompatActivity() {
             val navHostFragment2 = supportFragmentManager.findFragmentById(R.id.nav_host_fragment_landscape) as NavHostFragment
             val navController = navHostFragment2.navController
         }
-        getFavorites(this)
+        //getFavorites(this)
         }
 
-    fun getFavorites(context: Context){
+    /*fun getFavorites(context: Context){
         val scope = CoroutineScope(Job() + Dispatchers.Main)
         // Create a new coroutine on the UI thread
         scope.launch{
@@ -62,7 +62,7 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
-    }
+    }*/
 
 
 
