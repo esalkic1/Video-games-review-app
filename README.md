@@ -1,6 +1,6 @@
 # Video Game Viewer App
 
-![App Logo](3408506.png)
+<img src="3408506.png" alt="App Logo" width="200"/>
 
 ## Overview
 
