@@ -1,6 +1,6 @@
 # Video Game Viewer App
 
-![App Logo]([path/to/app-logo.png](https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.freepik.com%2Ficon%2Fgame-controller_316337&psig=AOvVaw0ewQ9Q-Bt6qpiQy_56q7JC&ust=1702731593890000&source=images&cd=vfe&opi=89978449&ved=0CBIQjRxqFwoTCMDpy9K_kYMDFQAAAAAdAAAAABAj))
+![App Logo](3408506.png)
 
 ## Overview
 
